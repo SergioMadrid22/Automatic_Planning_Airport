@@ -1,0 +1,4 @@
+*
+!.gitignore
+!pddlgym/pddl/airport/
+!pddlgym/pddl/airport.pddl
