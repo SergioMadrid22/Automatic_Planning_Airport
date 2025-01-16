@@ -1,4 +1,9 @@
-*
-!.gitignore
-!pddlgym/pddl/airport/
-!pddlgym/pddl/airport.pddl
+/*
+!/.gitignore
+!/pddlgym
+/pddlgym/*
+!/pddlgym/pddl
+/pddlgym/pddl/*
+!/pddlgym/pddl/airport
+!/pddlgym/pddl/airport.pddl
+!/q_algorithm.py
