@@ -87,7 +87,7 @@
 			(enganchado-a-maquina ?x ?y)
 			(enganchado-a-maquina ?x ?z)
 			(enganchado-a-vagon ?y ?z))
-		:effect (and (at ?y ?p)
+		:effect (and (at ?z ?p)
 			(not (ultimo-vagon ?x ?z))
 			(ultimo-vagon ?x ?y)
 			(no-enganchado ?z)
