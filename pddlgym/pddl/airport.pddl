@@ -1,13 +1,13 @@
 (define (domain AEROPUERTO)
 	(:requirements :strips :typing :negative-preconditions)
-	(:types
-		tren equipaje numero - objeto
-		maquina vagon - tren
-	)
+	(:types tren equipaje numero maquina vagon posicion)
 
 	(:predicates
-		(at ?x -
-			(either maquina vagon equipaje) ?y - posicion)
+		;(at ?x - (either maquina vagon equipaje) ?y - posicion)
+		; modificacion para pddlgym 
+		(at_maquina ?x - maquina ?y - posicion)
+		(at_vagon ?x - vagon ?y - posicion)
+		(at_equipaje ?x - equipaje ?y - posicion)
 		(adjacent ?x - posicion ?y - posicion)
 		(libre ?x - maquina)
 		(sospechoso ?x - equipaje)
@@ -20,29 +20,26 @@
 		(primer-vagon ?x - maquina ?y - vagon)
 		(equipaje-cargado-en ?x - vagon ?y - equipaje)
 		(es-oficina-inspeccion ?x - posicion)
-
-		;(capacidad-maxima ?v - vagon ?n - numero)
 		(carga-actual ?v - vagon ?n - numero)
-
 		(next ?v - vagon ?n1 - numero ?n2 - numero)
 	)
 
 	(:action move
-		:parameters (?x - maquina ?y ?z - posicion)
-		:precondition (and (at ?x ?y) (adjacent ?y ?z))
-		:effect (and (not (at ?x ?y))
-			(at ?x ?z))
+		:parameters (?x - maquina ?y - posicion ?z - posicion)
+		:precondition (and (at_maquina ?x ?y) (adjacent ?y ?z))
+		:effect (and (not (at_maquina ?x ?y))
+			(at_maquina ?x ?z))
 	)
 
 	(:action enganchar-primer-vagon
 		:parameters (?x - maquina ?y - vagon ?z - posicion ?n - numero)
-		:precondition (and (at ?x ?z) (at ?y ?z)
+		:precondition (and (at_maquina ?x ?z) (at_vagon ?y ?z)
 			(carga-actual ?y ?n)
 			(vacio ?n)
 			(libre ?x)
 			(no-enganchado ?y))
 		:effect (and (not (libre ?x))
-			(not(at ?y ?z))
+			(not(at_vagon ?y ?z))
 			(not (no-enganchado ?y))
 			(enganchado-a-maquina ?x ?y)
 			(ultimo-vagon ?x ?y)
@@ -50,8 +47,8 @@
 	)
 
 	(:action enganchar-vagon
-		:parameters (?x - maquina ?y ?z - vagon ?p - posicion ?n - numero)
-		:precondition (and (at ?x ?p) (at ?z ?p)
+		:parameters (?x - maquina ?y - vagon ?z - vagon ?p - posicion ?n - numero)
+		:precondition (and (at_maquina ?x ?p) (at_vagon ?z ?p)
 			(carga-actual ?z ?n)
 			(vacio ?n)
 			(ultimo-vagon ?x ?y)
@@ -61,18 +58,18 @@
 			(enganchado-a-vagon ?y ?z)
 			(ultimo-vagon ?x ?z)
 			(not(ultimo-vagon ?x ?y))
-			(not(at ?z ?p)))
+			(not(at_vagon ?z ?p)))
 	)
 
 	(:action desenganchar-primer-vagon
 		:parameters (?x - maquina ?y - vagon ?p - posicion ?n - numero)
-		:precondition (and (at ?x ?p)
+		:precondition (and (at_maquina ?x ?p)
 			(ultimo-vagon ?x ?y)
 			(primer-vagon ?x ?y)
 			(carga-actual ?y ?n)
 			(vacio ?n)
 			(enganchado-a-maquina ?x ?y))
-		:effect (and (at ?y ?p)
+		:effect (and (at_vagon ?y ?p)
 			(not (ultimo-vagon ?x ?y))
 			(not (primer-vagon ?x ?y))
 			(no-enganchado ?y)
@@ -82,14 +79,14 @@
 	)
 
 	(:action desenganchar-vagon
-		:parameters (?x - maquina ?y ?z - vagon ?p - posicion ?n - numero)
-		:precondition (and (at ?x ?p)
+		:parameters (?x - maquina ?y - vagon ?z - vagon ?p - posicion ?n - numero)
+		:precondition (and (at_maquina ?x ?p)
 			(ultimo-vagon ?x ?y)
 			(carga-actual ?z ?n)
 			(vacio ?n)
 			(enganchado-a-maquina ?x ?y)
 			(enganchado-a-vagon ?z ?y))
-		:effect (and (at ?y ?p)
+		:effect (and (at_vagon ?y ?p)
 			(not (ultimo-vagon ?x ?y))
 			(no-enganchado ?y)
 			(not (enganchado-a-maquina ?x ?y))
@@ -98,51 +95,41 @@
 	)
 
 	(:action cargar-equipaje
-		:parameters (?x - maquina ?y - vagon ?e - equipaje ?p - posicion ?n1 ?n2 - numero)
-		:precondition (and (at ?x ?p) (at ?e ?p)
+		:parameters (?x - maquina ?y - vagon ?e - equipaje ?p - posicion ?n1 - numero ?n2 - numero)
+		:precondition (and (at_maquina ?x ?p) (at_equipaje ?e ?p)
 			(carga-actual ?y ?n1)
 			(next ?y ?n1 ?n2)
 			(enganchado-a-maquina ?x ?y))
 		:effect (and (carga-actual ?y ?n2)
 			(equipaje-cargado-en ?y ?e)
 			(not (carga-actual ?y ?n1))
-			(not(at ?e ?p)))
+			(not(at_equipaje ?e ?p)))
 	)
 
 	(:action descargar-un-equipaje
-		:parameters (?x - maquina ?y - vagon ?e - equipaje ?p - posicion ?n1 ?n2 - numero)
-		:precondition (and (at ?x ?p)
+		:parameters (?x - maquina ?y - vagon ?e - equipaje ?p - posicion ?n1 - numero ?n2 - numero)
+		:precondition (and (at_maquina ?x ?p)
 			(no-sospechoso ?e)
 			(carga-actual ?y ?n1)
 			(next ?y ?n2 ?n1)
 			(enganchado-a-maquina ?x ?y)
 			(equipaje-cargado-en ?y ?e))
-		:effect (and (at ?e ?p)
+		:effect (and (at_equipaje ?e ?p)
 			(carga-actual ?y ?n2)
 			(not(carga-actual ?y ?n1))
 			(not(equipaje-cargado-en ?y ?e)))
 	)
 
-	; (:action vaciar-vagon
-	; 	:parameters (?x - maquina ?y - vagon ?e - equipaje ?p - posicion)
-	; 	:precondition (and (at ?x ?p)
-	; 		(enganchado-a-maquina ?x ?y)
-	; 		(equipaje-cargado-en ?y ?e))
-	; 	:effect (and (at ?e ?p)
-	; 		(vacio ?y)
-	; 	)
-	; )
-
 	(:action dejar-equipaje-en-oficina-de-inspeccion
-		:parameters (?x - maquina ?y - vagon ?e - equipaje ?p - posicion ?n1 ?n2 - numero)
-		:precondition (and (at ?x ?p)
+		:parameters (?x - maquina ?y - vagon ?e - equipaje ?p - posicion ?n1 - numero ?n2 - numero)
+		:precondition (and (at_maquina ?x ?p)
 			(es-oficina-inspeccion ?p)
 			(sospechoso ?e)
 			(carga-actual ?y ?n1)
 			(next ?y ?n2 ?n1)
 			(enganchado-a-maquina ?x ?y)
 			(equipaje-cargado-en ?y ?e))
-		:effect (and (at ?e ?p)
+		:effect (and (at_equipaje ?e ?p)
 			(carga-actual ?y ?n2)
 			(not(carga-actual ?y ?n1))
 			(not(equipaje-cargado-en ?y ?e)))
@@ -150,7 +137,7 @@
 
 	(:action investigar-equipaje
 		:parameters (?e - equipaje ?p - posicion)
-		:precondition (and (at ?e ?p)
+		:precondition (and (at_equipaje ?e ?p)
 			(es-oficina-inspeccion ?p))
 		:effect (and (not (sospechoso ?e)) (no-sospechoso ?e))
 	)
