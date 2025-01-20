@@ -79,15 +79,15 @@
 	)
 
 	(:action desenganchar-vagon
-		:parameters (?x - maquina ?y ?z - vagon ?p - posicion)
-		:precondition (and (at ?x ?p)
+		:parameters (?x - maquina ?y - vagon ?z - vagon ?p - posicion ?n - numero)
+		:precondition (and (at_maquina ?x ?p)
 			(ultimo-vagon ?x ?z)
 			(carga-actual ?z ?n)
 			(vacio ?n)
 			(enganchado-a-maquina ?x ?y)
 			(enganchado-a-maquina ?x ?z)
 			(enganchado-a-vagon ?y ?z))
-		:effect (and (at ?z ?p)
+		:effect (and (at_vagon ?z ?p)
 			(not (ultimo-vagon ?x ?z))
 			(ultimo-vagon ?x ?y)
 			(no-enganchado ?z)
