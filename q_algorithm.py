@@ -8,7 +8,8 @@ INICIALIZACIÓN DE PARÁMETROS
 '''
 
 # Crear entorno de PDDLGym a partir de nuestro dominio
-env = pddlgym.make ("PDDLEnvAirport-v0")
+#env = pddlgym.make ("PDDLEnvAirport-v0")
+env = pddlgym.make ("PDDLEnvAirport_adapted-v0")
 
 # Fijar el problema del entorno
 env.fix_problem_index(0)

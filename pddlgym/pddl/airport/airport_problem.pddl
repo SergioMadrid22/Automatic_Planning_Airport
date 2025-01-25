@@ -31,8 +31,8 @@
     
     ; Posiciones
     (es-oficina-inspeccion OI)
-    (no-enganchado V1) (no-enganchado V2) 
-    (no-enganchado V3) (no-enganchado V4) (no-enganchado V5) 
+    ;(no-enganchado V1) (no-enganchado V2) 
+    ;(no-enganchado V3) (no-enganchado V4) (no-enganchado V5) 
     (adjacent P1 P3) (adjacent P3 P1) 
     (adjacent P3 P4) (adjacent P4 P3) 
     (adjacent P4 P2) (adjacent P2 P4) 
