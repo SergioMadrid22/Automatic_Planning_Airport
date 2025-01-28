@@ -7,3 +7,5 @@
 !/pddlgym/pddl/airport
 !/pddlgym/pddl/airport.pddl
 !/q_algorithm.py
+!/q_experiments.sh
+!/results

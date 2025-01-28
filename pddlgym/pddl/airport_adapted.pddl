@@ -64,7 +64,7 @@
 			(enganchado-a-maquina ?x ?y))
 		:effect (and (at_vagon ?y ?p)
 			(not (ultimo-vagon ?x ?y))
-			(not (primer-vagon ?x ?y))s
+			(not (primer-vagon ?x ?y))
 			(not (enganchado-a-maquina ?x ?y))
 			(libre ?x)
 		)
