@@ -2,14 +2,15 @@
 (:domain AEROPUERTO_ADAPTED)
 (:objects P1 P2 P5 P6 ZF RE OI - posicion ; P3 P4 P7 P8 eliminadas
           M1 - maquina  ; M2
-          V1 - vagon ; V2 V3 V4 V5 He tenido que quitar el resto de vagones para que se repitieran estados y pudiese aprender algo el algoritmo
-          E3 - equipaje ; E1 E2 E4 E5 E6
+          V1 V2 - vagon ; V2 V3 V4 V5 He tenido que quitar el resto de vagones para que se repitieran estados y pudiese aprender algo el algoritmo
+          E3 E6 - equipaje ; E1 E2 E4 E5 E6
           ;N0 N1 N2 - numero  ELIMINAMOS CONTEO
           )
 (:init
     ; Vagones
     (at_vagon V1 P1) 
-    ;(at_vagon V2 P1) (at_vagon V3 P1) (at_vagon V4 P5) (at_vagon V5 P5)
+    (at_vagon V2 P1) 
+    ;(at_vagon V3 P1) (at_vagon V4 P5) (at_vagon V5 P5)
     ; ELIMINAMOS CONTEO
     ; (carga-actual V1 N0) (carga-actual V2 N0) 
     ; (carga-actual V3 N0) (carga-actual V4 N0) (carga-actual V5 N0)
@@ -19,7 +20,8 @@
     ; (next V4 N0 N1) (next V4 N1 N2)
     ; (next V5 N0 N1) (next V5 N1 N2)
     ;(vacio N0) AHORA EL PREDICADO VACIO ESTÁ ASIGNADO A CADA VAGÓN
-    (vacio V1) ;(vacio V2) (vacio V3) (vacio V4) (vacio V5)
+    (vacio V1) 
+    (vacio V2) ; (vacio V3) (vacio V4) (vacio V5)
 
 
     ; Maquinas
@@ -27,8 +29,9 @@
     (libre M1) ;(libre M2)
 
     ; Equipajes
-    ;(at_equipaje E1 ZF) (at_equipaje E2 ZF) (at_equipaje E4 P6) (at_equipaje E5 P2) (at_equipaje E6 P2) Probamos a dejar un solo equipaje
-    (at_equipaje E3 P6) 
+    ;(at_equipaje E1 ZF) (at_equipaje E2 ZF)  (at_equipaje E5 P2) 
+    (at_equipaje E6 P2) ;Probamos a dejar un solo equipaje
+    (at_equipaje E3 P6) ;(at_equipaje E4 P6)
     (sospechoso E3) ;(sospechoso E6)
     ;(no-sospechoso E1) (no-sospechoso E2) (no-sospechoso E4) (no-sospechoso E5)
     
@@ -59,6 +62,6 @@
             (at_equipaje E3 RE) 
             ;(at_equipaje E4 RE) 
             ;(at_equipaje E5 RE) 
-            ;(at_equipaje E6 RE)
+            (at_equipaje E6 RE)
             ))
 )
